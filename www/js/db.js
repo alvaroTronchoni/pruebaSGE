@@ -11,7 +11,8 @@ var cargarDB ={
         this.db.transaction(this.mostrarDB,this.mostrarDBerror);        
     },
     mostrarDB: function(tx){
-        var sql = "select * from usuarios";
+        //Paso 4 - ordenamos las consultas mostrando primero los ultimos anyadidos
+        var sql = "select * from usuarios order by ultimos desc";
         console.log("Lanzamos la consulta");
         tx.executeSql(sql,[],
             function(tx,result){
