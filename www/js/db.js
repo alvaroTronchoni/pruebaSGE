@@ -11,7 +11,6 @@ var cargarDB ={
         this.db.transaction(this.mostrarDB,this.mostrarDBerror);        
     },
     mostrarDB: function(tx){
-        //ORDER BY ultimos ASC
         var sql = "select * from usuarios";
         console.log("Lanzamos la consulta");
         tx.executeSql(sql,[],
@@ -73,7 +72,6 @@ var confDB = {
             "ultimos integer (1) CHECK (ultimos >= 0 and ultimos <= 1));";
         
         tx.executeSql(sql);
-        console.log("1 paso");
 
         //Paso 2 - no hace falta que pongamos valor real en el campo ultimos ya que luego se actualizara
         sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
@@ -85,12 +83,20 @@ var confDB = {
         sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
         "values(null,'Julio','Llacer Gastaldo','Alumno','julito@hotmail.coom',0);";
         tx.executeSql(sql);
-        console.log("2 paso");
+        //Paso 3 - para comprovar que el paso dos funciona anyadimos mas campos
+        sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
+        "values(null,'Jorge','Ombuena X','Alumno','alvaroroto@hotmail.coom',0);";
+        tx.executeSql(sql);
+        sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
+        "values(null,'Pablo','Maganya Pastor','Alumno','robert_y_tal_y_cual@hotmail.coom',0);";
+        tx.executeSql(sql);
+        sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
+        "values(null,'Manel','Andreu Gastaldo','Alumno','julito@hotmail.coom',0);";
+        tx.executeSql(sql);
 
         //Paso 2 - actualizamos para que los tres datos anyadidos al final sean los que tengan el 1
         sql = "update usuarios set ultimos = 1 where id in(select id from usuarios order by id desc limit 3);";
         tx.executeSql(sql);
-        console.log("3 paso");
 
 
     },
