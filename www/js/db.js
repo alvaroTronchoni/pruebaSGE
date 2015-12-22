@@ -68,19 +68,29 @@ var confDB = {
             "nombre varchar(50),"+
             "apellidos varchar(256),"+
             "cargo varchar(128),"+
-            "email varchar(64));";
+            "email varchar(64)," +
+            //Paso 2 - crear un nuevo campo en la base de datos que solo puede ser entre 0 y 1
+            "ultimos integer (1) CHECK (ultimos >= 0 and ultimos <= 1));";
         
         tx.executeSql(sql);
+        console.log("1 paso");
 
-        sql = "insert into usuarios(id,nombre,apellidos,cargo,email)"+
-        "values(null,'Alvaro','Tronchoni Aguilar','Alumno','alvaroroto@hotmail.coom');";
+        //Paso 2 - no hace falta que pongamos valor real en el campo ultimos ya que luego se actualizara
+        sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
+        "values(null,'Alvaro','Tronchoni Aguilar','Alumno','alvaroroto@hotmail.coom',0);";
         tx.executeSql(sql);
-        sql = "insert into usuarios(id,nombre,apellidos,cargo,email)"+
-        "values(null,'Robert','Villamayor Pastor','Alumno','robert_y_tal_y_cual@hotmail.coom');";
+        sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
+        "values(null,'Robert','Villamayor Pastor','Alumno','robert_y_tal_y_cual@hotmail.coom',0);";
         tx.executeSql(sql);
-        sql = "insert into usuarios(id,nombre,apellidos,cargo,email)"+
-        "values(null,'Julio','Llacer Gastaldo','Alumno','julito@hotmail.coom');";
+        sql = "insert into usuarios(id,nombre,apellidos,cargo,email,ultimos)"+
+        "values(null,'Julio','Llacer Gastaldo','Alumno','julito@hotmail.coom',0);";
         tx.executeSql(sql);
+        console.log("2 paso");
+
+        //Paso 2 - actualizamos para que los tres datos anyadidos al final sean los que tengan el 1
+        sql = "update usuarios set ultimos = 1 where id in(select id from usuarios order by id desc limit 3);";
+        tx.executeSql(sql);
+        console.log("3 paso");
 
 
     },
